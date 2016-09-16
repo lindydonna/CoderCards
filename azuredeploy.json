@@ -68,7 +68,8 @@
             "kind": "functionapp",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.Web/serverfarms', parameters('siteName'))]"
             ],
             "properties": {
                 "serverFarmId": "[variables('appServicePlanName')]",
