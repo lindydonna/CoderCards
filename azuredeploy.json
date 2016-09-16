@@ -17,8 +17,7 @@
                 "West US",
                 "West US 2"
             ],
-            "defaultValue": "[resourceGroup().location]",
-            "description": "The location to deploy your resources to"
+            "defaultValue": "[resourceGroup().location]"
         },
         "emotionAPIKey": {
             "type": "string"
