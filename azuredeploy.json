@@ -3,9 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "siteName": {
-            "type": "string",
-            "defaultValue": "[concat('coderCards', uniqueString(resourceGroup().id))]",
-            "description": "A name to identify the site in your Azure Subscription"
+            "type": "string"
         },
         "location": {
             "type": "string",
