@@ -4,6 +4,9 @@
     "parameters": {
         "siteName": {
             "value": "cf-cardGenerator"
+        },
+        "emotionAPIKey": {
+            "value": ""
         }
     }
 }

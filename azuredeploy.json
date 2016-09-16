@@ -21,6 +21,9 @@
             ],
             "defaultValue": "[resourceGroup().location]",
             "description": "The location to deploy your resources to"
+        },
+        "emotionAPIKey": {
+            "type": "string"
         }
     },
     "variables": {
@@ -61,7 +64,8 @@
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
             "properties": {
-                "serverFarmId": "[variables('appServicePlanName')]"
+                "serverFarmId": "[variables('appServicePlanName')]",
+                "alwaysOn": true
             },
             "resources": [
                 {
@@ -76,7 +80,8 @@
                         "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
                         "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
                         "AZUREJOBS_EXTENSION_VERSION": "beta",
-                        "FUNCTIONS_EXTENSION_VERSION": "latest"
+                        "FUNCTIONS_EXTENSION_VERSION": "latest",
+                        "EmotionAPIKey": "[parameters('emotionAPIKey')]"
                     }
                 }
             ]
