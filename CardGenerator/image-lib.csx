@@ -75,7 +75,7 @@ static void RenderText(Image source, Graphics graphics, float yCoordinate, strin
 
 static string GetFullImagePath(string filename)
 {
-    var appPath = Path.Combine(Environment.GetEnvironmentVariable("HOME"), "site", "wwwroot", "CardGenerator");
+    var appPath = Path.Combine(Environment.GetEnvironmentVariable("HOME"), "site", "wwwroot", "CardGenerator", "assets");
     return Path.Combine(appPath, filename);
 }
 
