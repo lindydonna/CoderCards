@@ -96,7 +96,8 @@
                     "name": "web",
                     "type": "sourcecontrols",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
+                        "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]",
+                        "[concat('Microsoft.Web/Sites/', parameters('siteName'), '/config/appsettings')]"
                     ],
                     "properties": {
                         "repoUrl": "[parameters('repoUrl')]",
