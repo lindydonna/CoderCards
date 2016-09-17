@@ -22,24 +22,15 @@
         "emotionAPIKey": {
             "type": "string"
         },
-<<<<<<< HEAD
         "repoUrl": {
             "type": "string"
         },
-=======
->>>>>>> a59bbf0d0121c8584fe2df8a6afb889aefa05ef3
         "branch": {
             "type": "string",
             "defaultValue": "master",
             "allowedValues": [
                 "master"
             ]
-<<<<<<< HEAD
-=======
-        },
-        "repoUrl": {
-            "type": "string"
->>>>>>> a59bbf0d0121c8584fe2df8a6afb889aefa05ef3
         }
     },
     "variables": {
@@ -65,13 +56,8 @@
             "type": "Microsoft.Web/serverfarms",
             "location": "[parameters('location')]",
             "sku": {
-<<<<<<< HEAD
                 "name": "B1",
                 "tier": "Basic"
-=======
-                "name": "F1",
-                "tier": "Free"
->>>>>>> a59bbf0d0121c8584fe2df8a6afb889aefa05ef3
             },
             "properties": {}
         },
@@ -117,11 +103,7 @@
                     "properties": {
                         "repoUrl": "[parameters('repoUrl')]",
                         "branch": "[parameters('branch')]",
-<<<<<<< HEAD
                         "IsManualIntegration": true
-=======
-                        "IsManualIntegration": false
->>>>>>> a59bbf0d0121c8584fe2df8a6afb889aefa05ef3
                     }
                 }
             ]
