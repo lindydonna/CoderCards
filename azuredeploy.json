@@ -26,7 +26,8 @@
             "type": "string",
             "defaultValue": "master",
             "allowedValues": [
-                "master"
+                "master", 
+                "demo-start"
             ]
         },
         "repoUrl": {
