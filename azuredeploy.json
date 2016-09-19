@@ -22,6 +22,9 @@
         "emotionAPIKey": {
             "type": "string"
         },
+        "repoUrl": {
+            "type": "string"
+        },
         "branch": {
             "type": "string",
             "defaultValue": "master",
@@ -29,9 +32,6 @@
                 "master",
                 "demo-start"
             ]
-        },
-        "repoUrl": {
-            "type": "string"
         }
     },
     "variables": {
@@ -57,8 +57,8 @@
             "type": "Microsoft.Web/serverfarms",
             "location": "[parameters('location')]",
             "sku": {
-                "name": "F1",
-                "tier": "Free"
+                "name": "B1",
+                "tier": "Basic"
             },
             "properties": {}
         },
@@ -104,7 +104,7 @@
                     "properties": {
                         "repoUrl": "[parameters('repoUrl')]",
                         "branch": "[parameters('branch')]",
-                        "IsManualIntegration": false
+                        "IsManualIntegration": true
                     }
                 }
             ]
