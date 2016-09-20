@@ -27,7 +27,7 @@ static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string>
         const int namePosX       = 25;
         const int namePosY       = 25;
         const int titlePosY      = 50;
-        const int nameWidth      = 230;
+        const int nameWidth      = 245;
         const int scoreLeftX     = 314;
         const int scoreRightX    = 342;
         const int scoreLeftPosY  = 45;
@@ -77,7 +77,7 @@ static ImageCodecInfo GetEncoder(ImageFormat format)
 static void RenderText(Graphics graphics, int xPos, int yPos, int width, string text)
 {
     var brush = new SolidBrush(Color.Black);
-    var fontSize = 22;
+    var fontSize = 14;
     var font = new Font("Microsoft Sans Serif", fontSize, FontStyle.Bold);
     SizeF size;
 
@@ -93,7 +93,7 @@ static void RenderText(Graphics graphics, int xPos, int yPos, int width, string 
 static void RenderScores(Graphics graphics, int xPos, int yPos, int width, string score)
 {
   var brush = new SolidBrush(Color.Black);
-  var fontSize = 20;
+  var fontSize = 16;
   var font = new Font("Microsoft Sans Serif", fontSize, FontStyle.Bold);
   SizeF size = graphics.MeasureString(score, font);
 
