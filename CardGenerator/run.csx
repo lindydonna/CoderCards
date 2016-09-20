@@ -27,7 +27,7 @@ public static async Task Run(byte[] image, string filename, Stream outputBlob, T
 
     MergeCardImage(card, image, personInfo, leftScore, rightScore);
 
-    card.Save(outputBlob, ImageFormat.Jpeg);
+    SaveAsJpeg(card, outputBlob);
 }
 
 static Image GetCardImageAndScores(Scores scores, out double leftScore, out double rightScore)
