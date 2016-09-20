@@ -22,43 +22,42 @@ public static async Task Run(byte[] image, string filename, Stream outputBlob, T
     var imageData = JsonConvert.DeserializeObject<Face[]>(result);
     var faceData = imageData[0]; // assume exactly one face
 
-    double leftScore = 0, rightScore = 0;
-    var card = GetCardImageAndScores(faceData.Scores, out leftScore, out rightScore);
+    double mainScore = 0, secondScore = 0;
+    var card = GetCardImageAndScores(faceData.Scores, out mainScore, out secondScore);
 
-    MergeCardImage(card, image, personInfo, leftScore, rightScore);
+    MergeCardImage(card, image, personInfo, mainScore, secondScore);
 
     SaveAsJpeg(card, outputBlob);
 }
 
-static Image GetCardImageAndScores(Scores scores, out double leftScore, out double rightScore)
+static double GetTotalScore(Scores scores) =>
+    scores.Anger + scores.Happiness + scores.Neutral + scores.Sadness + scores.Surprise;
+
+
+static Image GetCardImageAndScores(Scores scores, out double mainScore, out double secondScore)
 {
     NormalizeScores(scores);
 
     var cardBack = "neutral.png";
-    leftScore = scores.Neutral;
-
+    mainScore = scores.Neutral;
     const int angerBoost = 2, happyBoost = 4;
 
     if (scores.Surprise > 10) {
         cardBack = "surprised.png";
-        leftScore = scores.Surprise;
+        mainScore = scores.Surprise;
     }
     else if (scores.Anger > 10) {
         cardBack = "angry.png";
-        leftScore = scores.Anger * angerBoost;
+        mainScore = scores.Anger * angerBoost;
     }
     else if (scores.Happiness > 50) {
         cardBack = "happy.png";
-        leftScore = scores.Happiness * happyBoost;
+        mainScore = scores.Happiness * happyBoost;
     }
 
-    rightScore = GetTotalScore(scores);
-
+    secondScore = GetTotalScore(scores);
     return Image.FromFile(GetFullImagePath(cardBack));
 }
-
-static double GetTotalScore(Scores scores) =>
-    scores.Anger + scores.Happiness + scores.Neutral + scores.Sadness + scores.Surprise;
 
 static async Task<string> CallVisionAPI(byte[] image)
 {

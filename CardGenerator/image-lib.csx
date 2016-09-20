@@ -17,21 +17,21 @@ static void NormalizeScores(Scores scores)
     scores.Surprise = RoundScore(scores.Surprise);
 }
 
-static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string> personInfo, double leftScore, double rightScore)
+static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string> personInfo, double mainScore, double secondScore)
 {
     using (MemoryStream faceImageStream = new MemoryStream(imageBytes)) 
     {
         const int topLeftFaceX   = 44;
         const int topLeftFaceY   = 96;
         const int faceRect       = 332;
-        const int namePosX       = 25;
-        const int namePosY       = 25;
-        const int titlePosY      = 50;
+        const int nameTextX      = 25;
+        const int nameTextY      = 25;
+        const int titleTextY     = 50;
         const int nameWidth      = 245;
-        const int scoreLeftX     = 314;
-        const int scoreRightX    = 342;
-        const int scoreLeftPosY  = 45;
-        const int scoreRightPosY = 459;
+        const int mainScoreX     = 314;
+        const int mainScoreY     = 45;
+        const int secondScoreX   = 342;
+        const int secondScoreY   = 459;
         const int scoreWidth     = 45;
 
         using (Image faceImage = Image.FromStream(faceImageStream, true)) 
@@ -39,11 +39,11 @@ static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string>
             using (Graphics g = Graphics.FromImage(card)) 
             {
                 g.DrawImage(faceImage, topLeftFaceX, topLeftFaceY, faceRect, faceRect);
-                RenderText(g, namePosX, namePosY, nameWidth, personInfo.Item1);
-                RenderText(g, namePosX, titlePosY, nameWidth, personInfo.Item2);
+                RenderText(g, nameTextX, nameTextY, nameWidth, personInfo.Item1);
+                RenderText(g, nameTextX, titleTextY, nameWidth, personInfo.Item2);
 
-                RenderScores(g, scoreLeftX, scoreLeftPosY, scoreWidth, leftScore.ToString());
-                RenderScores(g, scoreRightX, scoreRightPosY, scoreWidth, rightScore.ToString());
+                RenderScores(g, mainScoreX, mainScoreY, scoreWidth, mainScore.ToString());
+                RenderScores(g, secondScoreX, secondScoreY, scoreWidth, secondScore.ToString());
             }
 
             return card;
