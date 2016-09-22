@@ -22,40 +22,35 @@ public static async Task Run(byte[] image, string filename, Stream outputBlob, T
     var imageData = JsonConvert.DeserializeObject<Face[]>(result);
     var faceData = imageData[0]; // assume exactly one face
 
-    double mainScore = 0, secondScore = 0;
-    var card = GetCardImageAndScores(faceData.Scores, out mainScore, out secondScore);
+    double score = 0;
+    var card = GetCardImageAndScores(faceData.Scores, out score);
 
-    MergeCardImage(card, image, personInfo, mainScore, secondScore);
+    MergeCardImage(card, image, personInfo, score);
 
     SaveAsJpeg(card, outputBlob);
 }
 
-static double GetTotalScore(Scores scores) =>
-    scores.Anger + scores.Happiness + scores.Neutral + scores.Sadness + scores.Surprise;
-
-
-static Image GetCardImageAndScores(Scores scores, out double mainScore, out double secondScore)
+static Image GetCardImageAndScores(Scores scores, out double score)
 {
     NormalizeScores(scores);
 
     var cardBack = "neutral.png";
-    mainScore = scores.Neutral;
+    score = scores.Neutral;
     const int angerBoost = 2, happyBoost = 4;
 
     if (scores.Surprise > 10) {
         cardBack = "surprised.png";
-        mainScore = scores.Surprise;
+        score = scores.Surprise;
     }
     else if (scores.Anger > 10) {
         cardBack = "angry.png";
-        mainScore = scores.Anger * angerBoost;
+        score = scores.Anger * angerBoost;
     }
     else if (scores.Happiness > 50) {
         cardBack = "happy.png";
-        mainScore = scores.Happiness * happyBoost;
+        score = scores.Happiness * happyBoost;
     }
 
-    secondScore = GetTotalScore(scores);
     return Image.FromFile(GetFullImagePath(cardBack));
 }
 

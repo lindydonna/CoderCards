@@ -17,22 +17,20 @@ static void NormalizeScores(Scores scores)
     scores.Surprise = RoundScore(scores.Surprise);
 }
 
-static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string> personInfo, double mainScore, double secondScore)
+static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string> personInfo, double score)
 {
     using (MemoryStream faceImageStream = new MemoryStream(imageBytes)) 
     {
-        const int topLeftFaceX   = 44;
-        const int topLeftFaceY   = 96;
-        const int faceRect       = 332;
-        const int nameTextX      = 25;
-        const int nameTextY      = 25;
-        const int titleTextY     = 50;
-        const int nameWidth      = 245;
-        const int mainScoreX     = 314;
-        const int mainScoreY     = 45;
-        const int secondScoreX   = 342;
-        const int secondScoreY   = 459;
-        const int scoreWidth     = 45;
+        const int topLeftFaceX   = 87;
+        const int topLeftFaceY   = 188;
+        const int faceRect       = 647;
+        const int nameTextX      = 56;
+        const int nameTextY      = 65;
+        const int titleTextY     = 108;
+        const int nameWidth      = 430;
+        const int scoreX         = 645;
+        const int scoreY         = 62;
+        const int scoreWidth     = 117;
 
         using (Image faceImage = Image.FromStream(faceImageStream, true)) 
         {
@@ -42,8 +40,7 @@ static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string>
                 RenderText(g, nameTextX, nameTextY, nameWidth, personInfo.Item1);
                 RenderText(g, nameTextX, titleTextY, nameWidth, personInfo.Item2);
 
-                RenderScores(g, mainScoreX, mainScoreY, scoreWidth, mainScore.ToString());
-                RenderScores(g, secondScoreX, secondScoreY, scoreWidth, secondScore.ToString());
+                RenderScore(g, scoreX, scoreY, scoreWidth, score.ToString());
             }
 
             return card;
@@ -77,7 +74,7 @@ static ImageCodecInfo GetEncoder(ImageFormat format)
 static void RenderText(Graphics graphics, int xPos, int yPos, int width, string text)
 {
     var brush = new SolidBrush(Color.Black);
-    var fontSize = 14;
+    var fontSize = 36;
     var font = new Font("Microsoft Sans Serif", fontSize, FontStyle.Bold);
     SizeF size;
 
@@ -90,10 +87,10 @@ static void RenderText(Graphics graphics, int xPos, int yPos, int width, string 
     graphics.DrawString(text, font, brush, xPos, yPos);
 }
 
-static void RenderScores(Graphics graphics, int xPos, int yPos, int width, string score)
+static void RenderScore(Graphics graphics, int xPos, int yPos, int width, string score)
 {
   var brush = new SolidBrush(Color.Black);
-  var fontSize = 16;
+  var fontSize = 38;
   var font = new Font("Microsoft Sans Serif", fontSize, FontStyle.Bold);
   SizeF size = graphics.MeasureString(score, font);
 
