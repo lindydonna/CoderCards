@@ -17,30 +17,32 @@ static void NormalizeScores(Scores scores)
     scores.Surprise = RoundScore(scores.Surprise);
 }
 
-static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string> personInfo, double leftScore, double rightScore)
+static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string> personInfo, double score)
 {
     using (MemoryStream faceImageStream = new MemoryStream(imageBytes)) 
     {
-        const int topLeftFaceX   = 82;
-        const int topLeftFaceY   = 60;
-        const int faceRect       = 380;
-        const int namePosY       = 470;
-        const int titlePosY      = 514;
-        const int scoreLeftX     = 36;
-        const int scoreRightX    = 445;
-        const int scorePosY      = 684;
-        const int scoreWidth     = 64;
+        const int topLeftFaceX   = 85;
+        const int topLeftFaceY   = 187;
+        const int faceRect       = 648;
+        const int nameTextX      = 56;
+        const int nameTextY      = 60;
+        const int titleTextY     = 108;
+        const int nameWidth      = 430;
+        const int scoreX         = 654;
+        const int scoreY         = 70;
+        const int scoreWidth     = 117;
+        const int nameFontSize   = 34;
+        const int titleFontSize  = 26;
 
         using (Image faceImage = Image.FromStream(faceImageStream, true)) 
         {
             using (Graphics g = Graphics.FromImage(card)) 
             {
                 g.DrawImage(faceImage, topLeftFaceX, topLeftFaceY, faceRect, faceRect);
-                RenderText(card, g, namePosY, personInfo.Item1);
-                RenderText(card, g, titlePosY, personInfo.Item2);
+                RenderText(g, nameFontSize, nameTextX, nameTextY, nameWidth, personInfo.Item1);
+                RenderText(g, titleFontSize, nameTextX + 4, titleTextY, nameWidth, personInfo.Item2); // second line seems to need some left padding
 
-                RenderScores(g, scoreLeftX, scorePosY, scoreWidth, leftScore.ToString());
-                RenderScores(g, scoreRightX, scorePosY, scoreWidth, rightScore.ToString());
+                RenderScore(g, scoreX, scoreY, scoreWidth, score.ToString());
             }
 
             return card;
@@ -48,19 +50,32 @@ static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string>
     }
 }
 
-static void RenderScores(Graphics graphics, int xPos, int yPos, int width, string score)
+// save with higher quality than the default, to avoid jpeg artifacts on the text and numbers
+static void SaveAsJpeg(Image image, Stream outputStream)
 {
-    var brush = new SolidBrush(Color.Black);
-    var fontSize = 28;
-    var font = new Font("Microsoft Sans Serif", fontSize, FontStyle.Bold);
-    SizeF size = graphics.MeasureString(score, font);
-    graphics.DrawString(score, font, brush, (width - size.Width) / 2 + xPos, yPos);
+    var jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+    var qualityEncoder = System.Drawing.Imaging.Encoder.Quality;
+    var encoderParams = new EncoderParameters(1);
+    encoderParams.Param[0] = new EncoderParameter(qualityEncoder, 90L);
+
+    image.Save(outputStream, jpgEncoder, encoderParams);
 }
 
-static void RenderText(Image source, Graphics graphics, float yCoordinate, string text)
+static ImageCodecInfo GetEncoder(ImageFormat format)
+{
+    ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+    foreach (ImageCodecInfo codec in codecs)
+    {
+        if (codec.FormatID == format.Guid) {
+          return codec;
+        }
+    }
+    return null;
+}
+
+static void RenderText(Graphics graphics, int fontSize, int xPos, int yPos, int width, string text)
 {
     var brush = new SolidBrush(Color.Black);
-    var fontSize = 28;
     var font = new Font("Microsoft Sans Serif", fontSize, FontStyle.Bold);
     SizeF size;
 
@@ -68,9 +83,19 @@ static void RenderText(Image source, Graphics graphics, float yCoordinate, strin
         font = new Font("Microsoft Sans Serif", fontSize--, FontStyle.Bold);
         size = graphics.MeasureString(text, font);
     }
-    while (size.Width > (source.Width - 50));
+    while (size.Width > width);
 
-    graphics.DrawString(text, font, brush, (source.Width - size.Width) / 2, yCoordinate);
+    graphics.DrawString(text, font, brush, xPos, yPos);
+}
+
+static void RenderScore(Graphics graphics, int xPos, int yPos, int width, string score)
+{
+  var brush = new SolidBrush(Color.Black);
+  var fontSize = 38;
+  var font = new Font("Microsoft Sans Serif", fontSize, FontStyle.Bold);
+  SizeF size = graphics.MeasureString(score, font);
+
+  graphics.DrawString(score, font, brush, width - size.Width + xPos, yPos);
 }
 
 static string GetFullImagePath(string filename)

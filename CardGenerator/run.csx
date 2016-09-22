@@ -10,20 +10,20 @@ using System.Drawing.Imaging;
 
 public static async Task Run(byte[] image, string filename, Stream outputBlob, TraceWriter log)
 {
-    string result = await CallVisionAPI(image);
+    string result = await CallEmotionAPI(image);
     log.Info(result);
 
     if (String.IsNullOrEmpty(result)) {
         return;
     }
-
+ 
     var personInfo = GetNameAndTitle(filename);
 
     var imageData = JsonConvert.DeserializeObject<Face[]>(result);
     var faceData = imageData[0]; // assume exactly one face
 }
 
-static async Task<string> CallVisionAPI(byte[] image)
+static async Task<string> CallEmotionAPI(byte[] image)
 {
     var client = new HttpClient();
 
