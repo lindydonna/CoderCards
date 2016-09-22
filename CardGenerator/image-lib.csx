@@ -21,24 +21,26 @@ static Image MergeCardImage(Image card, byte[] imageBytes, Tuple<string, string>
 {
     using (MemoryStream faceImageStream = new MemoryStream(imageBytes)) 
     {
-        const int topLeftFaceX   = 87;
-        const int topLeftFaceY   = 188;
-        const int faceRect       = 647;
+        const int topLeftFaceX   = 85;
+        const int topLeftFaceY   = 187;
+        const int faceRect       = 648;
         const int nameTextX      = 56;
-        const int nameTextY      = 65;
+        const int nameTextY      = 60;
         const int titleTextY     = 108;
         const int nameWidth      = 430;
-        const int scoreX         = 645;
-        const int scoreY         = 62;
+        const int scoreX         = 654;
+        const int scoreY         = 70;
         const int scoreWidth     = 117;
+        const int nameFontSize   = 34;
+        const int titleFontSize  = 26;
 
         using (Image faceImage = Image.FromStream(faceImageStream, true)) 
         {
             using (Graphics g = Graphics.FromImage(card)) 
             {
                 g.DrawImage(faceImage, topLeftFaceX, topLeftFaceY, faceRect, faceRect);
-                RenderText(g, nameTextX, nameTextY, nameWidth, personInfo.Item1);
-                RenderText(g, nameTextX, titleTextY, nameWidth, personInfo.Item2);
+                RenderText(g, nameFontSize, nameTextX, nameTextY, nameWidth, personInfo.Item1);
+                RenderText(g, titleFontSize, nameTextX + 4, titleTextY, nameWidth, personInfo.Item2); // second line seems to need some left padding
 
                 RenderScore(g, scoreX, scoreY, scoreWidth, score.ToString());
             }
@@ -71,10 +73,9 @@ static ImageCodecInfo GetEncoder(ImageFormat format)
     return null;
 }
 
-static void RenderText(Graphics graphics, int xPos, int yPos, int width, string text)
+static void RenderText(Graphics graphics, int fontSize, int xPos, int yPos, int width, string text)
 {
     var brush = new SolidBrush(Color.Black);
-    var fontSize = 36;
     var font = new Font("Microsoft Sans Serif", fontSize, FontStyle.Bold);
     SizeF size;
 
