@@ -10,57 +10,51 @@ using System.Drawing.Imaging;
 
 public static async Task Run(byte[] image, string filename, Stream outputBlob, TraceWriter log)
 {
-    string result = await CallVisionAPI(image);
+    string result = await CallEmotionAPI(image);
     log.Info(result);
 
     if (String.IsNullOrEmpty(result)) {
         return;
     }
-
+ 
     var personInfo = GetNameAndTitle(filename);
 
     var imageData = JsonConvert.DeserializeObject<Face[]>(result);
     var faceData = imageData[0]; // assume exactly one face
 
-    double leftScore = 0, rightScore = 0;
-    var card = GetCardImageAndScores(faceData.Scores, out leftScore, out rightScore);
+    double score = 0;
+    var card = GetCardImageAndScores(faceData.Scores, out score);
 
-    MergeCardImage(card, image, personInfo, leftScore, rightScore);
+    MergeCardImage(card, image, personInfo, score);
 
-    card.Save(outputBlob, ImageFormat.Jpeg);
+    SaveAsJpeg(card, outputBlob);
 }
 
-static Image GetCardImageAndScores(Scores scores, out double leftScore, out double rightScore)
+static Image GetCardImageAndScores(Scores scores, out double score)
 {
     NormalizeScores(scores);
 
     var cardBack = "neutral.png";
-    leftScore = scores.Neutral;
-
+    score = scores.Neutral;
     const int angerBoost = 2, happyBoost = 4;
 
     if (scores.Surprise > 10) {
         cardBack = "surprised.png";
-        leftScore = scores.Surprise;
+        score = scores.Surprise;
     }
     else if (scores.Anger > 10) {
         cardBack = "angry.png";
-        leftScore = scores.Anger * angerBoost;
+        score = scores.Anger * angerBoost;
     }
     else if (scores.Happiness > 50) {
         cardBack = "happy.png";
-        leftScore = scores.Happiness * happyBoost;
+        score = scores.Happiness * happyBoost;
     }
-
-    rightScore = GetTotalScore(scores);
 
     return Image.FromFile(GetFullImagePath(cardBack));
 }
 
-static double GetTotalScore(Scores scores) =>
-    scores.Anger + scores.Happiness + scores.Neutral + scores.Sadness + scores.Surprise;
-
-static async Task<string> CallVisionAPI(byte[] image)
+static async Task<string> CallEmotionAPI(byte[] image)
 {
     var client = new HttpClient();
 
