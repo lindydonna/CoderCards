@@ -4,13 +4,13 @@
       "name": "image",
       "type": "blobTrigger",
       "direction": "in",
-      "path": "card-input/{filename}.jpg",
+      "path": "%input-container%/{filename}.jpg",
       "connection": "AzureWebJobsDashboard"
     },
     {
       "type": "blob",
       "name": "outputBlob",
-      "path": "card-output/{filename}.jpg",
+      "path": "%output-container%/{filename}.jpg",
       "connection": "AzureWebJobsDashboard",
       "direction": "out"
     }
