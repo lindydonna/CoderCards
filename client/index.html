@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <meta name="author" content="Microsoft">
+    <meta name="description" content="An Azure Functions and Azure Cognitive Services demo. Generate a Coder Card based on an image you upload">
+    <meta name="keywords" content="azure,azure functions,azure cognitive services,coder cards">
+    <link rel="shortcut icon" href="/public/favicon.ico" type="image/vnd.microsoft.icon">
+    <link rel="stylesheet" href="/node_modules/dropzone/dist/dropzone.css" type="text/css">
+    <link rel="stylesheet" href="/public/css/main.css" type="text/css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+    <script src="/node_modules/dropzone/dist/dropzone.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        // Disable autoDiscover
+        Dropzone.autoDiscover = false;
+    </script>
+    <script src="https://use.fontawesome.com/bc4f54b80b.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="box header">
+            <h1><span class="fa fa-user-circle-o"></span> Coder Cards</h1>
+        </div>
+        <div class="box content">
+            <hr>
+            <h2>1. Upload a picture of yourself</h2>
+            <div>
+                <form class="dropzone needsclick dz-clickable" id="dropzone">
+                    <div class="dz-message needsclick">
+                        Drop files here or click to upload.<br>
+                    </div>
+                </form>
+                <!--
+                <form id="form1">
+                    <input type="file" name="fileToUpload" id="fileToUpload" />
+                    <input type="button" onclick="uploadFiles()" value="Upload" />
+                </form>
+                -->
+            </div>
+            <h2>2. Your coder profile will appear below</h2>
+            <div id="images">
+            </div>
+        </div>
+        <div class="box footer">
+            <hr>
+            <div class="privacy">
+                <p>This app has no official privacy policy. Your data will be uploaded to a service in order produce a picture. Your images will be public once you upload them and there is no automated way to remove them.</p>
+            </div>
+        </div>
+    </div>
+    <script src="/public/js/codercards.js" type="text/javascript"></script>
+</body>
+
+</html>

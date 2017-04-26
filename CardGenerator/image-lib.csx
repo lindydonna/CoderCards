@@ -100,7 +100,7 @@ static void RenderScore(Graphics graphics, int xPos, int yPos, int width, string
 
 static string GetFullImagePath(string filename)
 {
-    var appPath = Path.Combine(Environment.GetEnvironmentVariable("HOME"), "site", "wwwroot", "CardGenerator", "assets");
+    var appPath = Path.Combine(Environment.GetEnvironmentVariable("ROOT"), "CardGenerator", "assets");
     return Path.Combine(appPath, filename);
 }
 
