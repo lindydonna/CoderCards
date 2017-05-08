@@ -8,7 +8,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-private const string EMOTION_API_URI      = "https://api.projectoxford.ai/emotion/v1.0/recognize";
+private const string EMOTION_API_URI      = "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize";
 private const string EMOTION_API_KEY_NAME = "EmotionAPIKey";
 private const string ASSETS_FOLDER        = "assets";
 
